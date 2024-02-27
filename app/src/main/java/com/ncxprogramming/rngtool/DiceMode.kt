@@ -84,7 +84,11 @@ fun DiceMode(navController: NavHostController) {
                 var sliderPosition by remember { mutableFloatStateOf(0f) }
                 Column {
                     Slider(
+<<<<<<< HEAD
                         modifier = Modifier.padding(horizontal = 24.dp),
+=======
+                        modifier = Modifier.padding(vertical = 4.dp),
+>>>>>>> 93b8e9686c1874ff2712cfde325aa6faabee5160
                         value = sliderPosition,
                         onValueChange = { sliderPosition = it },
                         colors = SliderDefaults.colors(
@@ -102,6 +106,7 @@ fun DiceMode(navController: NavHostController) {
                 }
                 Button(
                     modifier = Modifier.padding(vertical = 4.dp),
+<<<<<<< HEAD
                     onClick = {println("Clicked Roll Button")
                     }) {
                     Text("Roll!")
@@ -111,6 +116,13 @@ fun DiceMode(navController: NavHostController) {
                     onClick = {println("Clicked Clear Button")
                     }) {
                     Text("Clear!")}
+=======
+                    onClick = {println("Clicked!")
+                    }) {
+                    Text("Clear")
+                }
+
+>>>>>>> 93b8e9686c1874ff2712cfde325aa6faabee5160
 
             }
         }
