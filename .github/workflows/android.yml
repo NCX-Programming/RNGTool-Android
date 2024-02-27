@@ -27,7 +27,7 @@ jobs:
         ./gradlew build
         ./gradlew assembleDebug
         export git_hash=$(git rev-parse --short "${{ github.sha }}")
-        mv build/outputs/apk/debug/app-debug.apk ~/RNGTool-Android-Debug-$git_hash.apk
+        mv app/build/outputs/apk/debug/app-debug.apk ~/RNGTool-Android-Debug-$git_hash.apk
     - name: Publish Debug APK
       uses: actions/upload-artifact@v4.3.0
       with:
