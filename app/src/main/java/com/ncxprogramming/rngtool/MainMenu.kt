@@ -40,6 +40,9 @@ fun RNGToolNavHost(
                 onNavigateToNumberMode = {
                     navController.navigate("NumberMode")
                 },
+                onNavigateToDiceMode = {
+                    navController.navigate("DiceMode")
+                }
             )
         }
         composable(
@@ -64,6 +67,28 @@ fun RNGToolNavHost(
             }
         ) { NumberMode(navController = navController)
         }
+        composable(
+            "DiceMode",
+            enterTransition = {
+                when (initialState.destination.route) {
+                    "MainMenu" ->
+                        slideInHorizontally(animationSpec = tween(300)) {
+                                fullWidth -> fullWidth / 1
+                        }
+                    else -> null
+                }
+            },
+            exitTransition = {
+                when (targetState.destination.route) {
+                    "MainMenu" ->
+                        slideOutHorizontally(animationSpec = tween(300)) {
+                                fullWidth -> fullWidth / 1
+                        }
+                    else -> null
+                }
+            }
+        ) { DiceMode(navController = navController)
+        }
     }
 }
 
@@ -71,6 +96,7 @@ fun RNGToolNavHost(
 @Composable
 fun MainMenu(
     onNavigateToNumberMode: () -> Unit,
+    onNavigateToDiceMode: () -> Unit,
     ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
@@ -106,7 +132,7 @@ fun MainMenu(
                     }
                     Spacer(modifier = Modifier.weight(1f))
                 }
-                Button(onClick = { /*TODO*/ },
+                Button(onClick = onNavigateToDiceMode,
                     modifier = Modifier
                         .padding(all = 8.dp)
                         .fillMaxWidth(),
