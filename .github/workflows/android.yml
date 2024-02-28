@@ -12,9 +12,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up JDK 17
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
@@ -22,5 +22,14 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-    - name: Build with Gradle
-      run: ./gradlew build
+    - name: Build Debug APK with Gradle
+      run: |
+        ./gradlew build
+        ./gradlew assembleDebug
+        export git_hash=$(git rev-parse --short "${{ github.sha }}")
+        mv app/build/outputs/apk/debug/app-debug.apk ~/RNGTool-Android-Debug-$git_hash.apk
+    - name: Publish Debug APK
+      uses: actions/upload-artifact@v4.3.0
+      with:
+        path: ~/*.apk
+        name: RNGTool-Android-Debug
