@@ -102,33 +102,62 @@ fun DiceMode(navController: NavHostController) {
                         steps = 4,
                         valueRange = 1f..6f
                     )
-                    Text(
-                        text = sliderPosition.toString(),
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                    )
                 }
+                Text(
+                    text = sliderPosition.toString(),
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+                var dice = remember { mutableListOf("0", "0", "0", "0", "0", "0") }
+                var state = remember { mutableStateOf(dice) }
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Button(
-                        modifier = Modifier.padding(horizontal = 8.dp),
-                        onClick = {DiceRoller(sliderPosition.toInt())
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
+                        onClick = {
+                            dice = DiceRoller(sliderPosition.toInt())
+
                         }) {
                         Text("Roll!")
                     }
                     Button(
-                        modifier = Modifier.padding(horizontal = 8.dp),
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
                         onClick = {
                             sliderPosition += 1
                         }) {
-                        Text("Clear!")}
-                    Text("$sliderPosition")
+                        Text("Clear!")
+                    }
+                }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Button(
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
+                        onClick = {
+                            println("Clicking this does nothing!")
+                        }) {
+                        Text(dice.joinToString(" "))
+                    }
+
                 }
             }
         }
     }
 }
 
-fun DiceRoller(sliderPos: Int) {
-    println("slider position should be.. $sliderPos")
+fun DiceRoller(sliderPos: Int): MutableList<String> {
+    var dice = arrayOf(0, 0, 0, 0, 0, 0)
+    var dicestr = arrayOf("0", "0", "0", "0", "0", "0")
+    var randomNumber = 0
+
+    println("Slider Position is: $sliderPos")
+
+    for (die in dice.indices) {
+        randomNumber = (1..6).random()
+        dice[die] = randomNumber
+        println("Item at $die is equal to ${dice[die]}")
+    }
+    println(dice.joinToString())
+
+    dicestr = arrayOf(dice.toString())
+
+    return dicestr.toMutableList()
 }
 
 
