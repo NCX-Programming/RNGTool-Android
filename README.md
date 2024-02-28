@@ -15,4 +15,4 @@ Generate up to 5 random numbers and letters using marbles. Marble icons are show
 ## System Requirements
 - At least Android 8.0 or higher
 ## Installation
-RNGTool Android is still in early beta, but you can find development builds in ![Github Actions](https://github.com/DamiDoop/RNGTool-Android/actions/workflows/android.yml)!
+RNGTool Android is still in early beta, but you can find development builds in ![Github Actions](https://github.com/DamiDoop/RNGTool-Android/actions/workflows/android.yml) that you can install on your Android device.
