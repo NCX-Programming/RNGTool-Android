@@ -144,7 +144,8 @@ fun MainMenu(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(rememberCasino(), "Dice")
-                        Text("Dice Mode", fontSize = 18.sp, modifier = Modifier.padding(horizontal = 8.dp))
+                        Text("Dice Mode", fontSize = 18.sp, modifier = Modifier.padding(horizontal = 8.dp)
+                        )
                     }
                     Spacer(modifier = Modifier.weight(1f))
                 }

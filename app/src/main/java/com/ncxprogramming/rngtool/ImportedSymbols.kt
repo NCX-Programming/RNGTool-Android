@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
+import com.ncxprogramming.rngtool.ui.theme.md_theme_light_primary
 
 @Composable
 fun rememberTag(): ImageVector {
@@ -108,6 +109,105 @@ fun rememberCasino(): ImageVector {
         ).apply {
             path(
                 fill = SolidColor(Color.Black),
+                fillAlpha = 1f,
+                stroke = null,
+                strokeAlpha = 1f,
+                strokeLineWidth = 1.0f,
+                strokeLineCap = StrokeCap.Butt,
+                strokeLineJoin = StrokeJoin.Miter,
+                strokeLineMiter = 1f,
+                pathFillType = PathFillType.NonZero
+            ) {
+                moveTo(12.625f, 29.5f)
+                quadToRelative(0.917f, 0f, 1.542f, -0.625f)
+                reflectiveQuadToRelative(0.625f, -1.5f)
+                quadToRelative(0f, -0.917f, -0.625f, -1.542f)
+                reflectiveQuadToRelative(-1.542f, -0.625f)
+                quadToRelative(-0.875f, 0f, -1.5f, 0.625f)
+                reflectiveQuadToRelative(-0.625f, 1.542f)
+                quadToRelative(0f, 0.875f, 0.625f, 1.5f)
+                reflectiveQuadToRelative(1.5f, 0.625f)
+                close()
+                moveToRelative(0f, -14.708f)
+                quadToRelative(0.917f, 0f, 1.542f, -0.625f)
+                reflectiveQuadToRelative(0.625f, -1.542f)
+                quadToRelative(0f, -0.875f, -0.625f, -1.5f)
+                reflectiveQuadToRelative(-1.542f, -0.625f)
+                quadToRelative(-0.875f, 0f, -1.5f, 0.625f)
+                reflectiveQuadToRelative(-0.625f, 1.5f)
+                quadToRelative(0f, 0.917f, 0.625f, 1.542f)
+                reflectiveQuadToRelative(1.5f, 0.625f)
+                close()
+                moveTo(20f, 22.125f)
+                quadToRelative(0.875f, 0f, 1.5f, -0.625f)
+                reflectiveQuadToRelative(0.625f, -1.5f)
+                quadToRelative(0f, -0.875f, -0.625f, -1.5f)
+                reflectiveQuadToRelative(-1.5f, -0.625f)
+                quadToRelative(-0.875f, 0f, -1.5f, 0.625f)
+                reflectiveQuadToRelative(-0.625f, 1.5f)
+                quadToRelative(0f, 0.875f, 0.625f, 1.5f)
+                reflectiveQuadToRelative(1.5f, 0.625f)
+                close()
+                moveToRelative(7.375f, 7.375f)
+                quadToRelative(0.875f, 0f, 1.5f, -0.625f)
+                reflectiveQuadToRelative(0.625f, -1.5f)
+                quadToRelative(0f, -0.917f, -0.625f, -1.542f)
+                reflectiveQuadToRelative(-1.5f, -0.625f)
+                quadToRelative(-0.917f, 0f, -1.542f, 0.625f)
+                reflectiveQuadToRelative(-0.625f, 1.542f)
+                quadToRelative(0f, 0.875f, 0.625f, 1.5f)
+                reflectiveQuadToRelative(1.542f, 0.625f)
+                close()
+                moveToRelative(0f, -14.708f)
+                quadToRelative(0.875f, 0f, 1.5f, -0.625f)
+                reflectiveQuadToRelative(0.625f, -1.542f)
+                quadToRelative(0f, -0.875f, -0.625f, -1.5f)
+                reflectiveQuadToRelative(-1.5f, -0.625f)
+                quadToRelative(-0.917f, 0f, -1.542f, 0.625f)
+                reflectiveQuadToRelative(-0.625f, 1.5f)
+                quadToRelative(0f, 0.917f, 0.625f, 1.542f)
+                reflectiveQuadToRelative(1.542f, 0.625f)
+                close()
+                moveTo(7.875f, 34.75f)
+                quadToRelative(-1.042f, 0f, -1.833f, -0.792f)
+                quadToRelative(-0.792f, -0.791f, -0.792f, -1.833f)
+                verticalLineTo(7.875f)
+                quadToRelative(0f, -1.042f, 0.792f, -1.833f)
+                quadToRelative(0.791f, -0.792f, 1.833f, -0.792f)
+                horizontalLineToRelative(24.25f)
+                quadToRelative(1.042f, 0f, 1.833f, 0.792f)
+                quadToRelative(0.792f, 0.791f, 0.792f, 1.833f)
+                verticalLineToRelative(24.25f)
+                quadToRelative(0f, 1.042f, -0.792f, 1.833f)
+                quadToRelative(-0.791f, 0.792f, -1.833f, 0.792f)
+                close()
+                moveToRelative(0f, -2.625f)
+                horizontalLineToRelative(24.25f)
+                verticalLineTo(7.875f)
+                horizontalLineTo(7.875f)
+                verticalLineToRelative(24.25f)
+                close()
+                moveToRelative(0f, -24.25f)
+                verticalLineToRelative(24.25f)
+                verticalLineToRelative(-24.25f)
+                close()
+            }
+        }.build()
+    }
+}
+
+@Composable
+fun rememberDie(): ImageVector {
+    return remember {
+        ImageVector.Builder(
+            name = "casino",
+            defaultWidth = 40.0.dp,
+            defaultHeight = 40.0.dp,
+            viewportWidth = 40.0f,
+            viewportHeight = 40.0f
+        ).apply {
+            path(
+                fill = SolidColor(md_theme_light_primary),
                 fillAlpha = 1f,
                 stroke = null,
                 strokeAlpha = 1f,

@@ -1,11 +1,18 @@
 package com.ncxprogramming.rngtool
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ButtonDefaults.buttonColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -74,21 +82,16 @@ fun DiceMode(navController: NavHostController) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                var sliderValue = 0
-
-                Image(
-                    modifier = Modifier.padding(vertical = 12.dp),
-                    painter = painterResource(id = R.drawable.baseline_casino_24),
-                    contentDescription = null
-                )
+//                Image(
+//                    painter = painterResource(id = R.drawable.baseline_casino_24),
+//                    contentDescription = null,
+//
+//                    )
+                Icon(rememberDie(), "Dice")
                 var sliderPosition by remember { mutableFloatStateOf(0f) }
                 Column {
                     Slider(
-<<<<<<< HEAD
                         modifier = Modifier.padding(horizontal = 24.dp),
-=======
-                        modifier = Modifier.padding(vertical = 4.dp),
->>>>>>> 93b8e9686c1874ff2712cfde325aa6faabee5160
                         value = sliderPosition,
                         onValueChange = { sliderPosition = it },
                         colors = SliderDefaults.colors(
@@ -96,38 +99,38 @@ fun DiceMode(navController: NavHostController) {
                             activeTrackColor = MaterialTheme.colorScheme.secondary,
                             inactiveTrackColor = MaterialTheme.colorScheme.secondaryContainer,
                         ),
-                        steps = 5,
-                        valueRange = 0f..6f
+                        steps = 4,
+                        valueRange = 1f..6f
                     )
                     Text(
                         text = sliderPosition.toString(),
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
                 }
-                Button(
-                    modifier = Modifier.padding(vertical = 4.dp),
-<<<<<<< HEAD
-                    onClick = {println("Clicked Roll Button")
-                    }) {
-                    Text("Roll!")
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Button(
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        onClick = {DiceRoller(sliderPosition.toInt())
+                        }) {
+                        Text("Roll!")
+                    }
+                    Button(
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        onClick = {
+                            sliderPosition += 1
+                        }) {
+                        Text("Clear!")}
+                    Text("$sliderPosition")
                 }
-                Button(
-                    modifier = Modifier.padding(vertical = 4.dp),
-                    onClick = {println("Clicked Clear Button")
-                    }) {
-                    Text("Clear!")}
-=======
-                    onClick = {println("Clicked!")
-                    }) {
-                    Text("Clear")
-                }
-
->>>>>>> 93b8e9686c1874ff2712cfde325aa6faabee5160
-
             }
         }
     }
 }
+
+fun DiceRoller(sliderPos: Int) {
+    println("slider position should be.. $sliderPos")
+}
+
 
 @Preview(showBackground = true)
 @Composable
