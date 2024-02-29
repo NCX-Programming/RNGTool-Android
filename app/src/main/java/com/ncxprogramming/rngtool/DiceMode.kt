@@ -100,7 +100,7 @@ fun DiceMode(navController: NavHostController) {
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* do something */ }) {
+                    IconButton(onClick = { /* TODO: FIGURE THIS OUT */ }) {
                         Icon(
                             imageVector = Icons.Filled.Menu,
                             contentDescription = "Localized description"
@@ -138,6 +138,7 @@ fun DiceMode(navController: NavHostController) {
                 var die4 by remember { mutableIntStateOf(0) }
                 var die5 by remember { mutableIntStateOf(0) }
                 var die6 by remember { mutableIntStateOf(0) }
+                var dieRandCap by remember { mutableIntStateOf(0) }
 
 //                Image(
 //                    painter = painterResource(id = R.drawable.baseline_casino_24),
@@ -168,102 +169,112 @@ fun DiceMode(navController: NavHostController) {
                             valueRange = 1f..6f,
                         )
                     }
+                }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    dieRandCap = DropDownExample()
+                }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Button(
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
+                        onClick = {
+                            println("Slider Position is: $sliderPosition")
+
+                            die1 = (1..dieRandCap).random()
+                            die2 = (1..dieRandCap).random()
+                            die3 = (1..dieRandCap).random()
+                            die4 = (1..dieRandCap).random()
+                            die5 = (1..dieRandCap).random()
+                            die6 = (1..dieRandCap).random()
+
+                            println("$die1, $die2, $die3, $die4, $die5 $die6")
+
+                        }) {
+                        Text("Roll!")
                     }
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        DropDownExample()
+                    Button(
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
+                        onClick = {
+                            die1 = 0
+                            die2 = 0
+                            die3 = 0
+                            die4 = 0
+                            die5 = 0
+                            die6 = 0
+                        }) {
+                        Text("Clear!")
                     }
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Button(
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
-                            onClick = {
-                                println("Slider Position is: $sliderPosition")
+                }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Button(
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
+                        onClick = {
 
-                                die1 = (1..6).random()
-                                die2 = (1..6).random()
-                                die3 = (1..6).random()
-                                die4 = (1..6).random()
-                                die5 = (1..6).random()
-                                die6 = (1..6).random()
+                        }) {
 
-                                println("$die1, $die2, $die3, $die4, $die5 $die6")
-
-                            }) {
-                            Text("Roll!")
+                        if (sliderPosition.toInt() == 1) {
+                            Text("$die1")
+                        } else if (sliderPosition.toInt() == 2) {
+                            Text("$die1, $die2")
+                        } else if (sliderPosition.toInt() == 3) {
+                            Text("$die1, $die2, $die3")
+                        } else if (sliderPosition.toInt() == 4) {
+                            Text("$die1, $die2, $die3, $die4")
+                        } else if (sliderPosition.toInt() == 5) {
+                            Text("$die1, $die2, $die3, $die4, $die5")
+                        } else if (sliderPosition.toInt() == 6) {
+                            Text("$die1, $die2, $die3, $die4, $die5, $die6")
                         }
-                        Button(
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
-                            onClick = {
-                                die1 = 0
-                                die2 = 0
-                                die3 = 0
-                                die4 = 0
-                                die5 = 0
-                                die6 = 0
-                            }) {
-                            Text("Clear!")
-                        }
-                    }
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Button(
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
-                            onClick = {
-
-                            }) {
-
-                            if (sliderPosition.toInt() == 1) {
-                                Text("$die1")
-                            } else if (sliderPosition.toInt() == 2) {
-                                Text("$die1, $die2")
-                            } else if (sliderPosition.toInt() == 3) {
-                                Text("$die1, $die2, $die3")
-                            } else if (sliderPosition.toInt() == 4) {
-                                Text("$die1, $die2, $die3, $die4")
-                            } else if (sliderPosition.toInt() == 5) {
-                                Text("$die1, $die2, $die3, $die4, $die5")
-                            } else if (sliderPosition.toInt() == 6) {
-                                Text("$die1, $die2, $die3, $die4, $die5, $die6")
-                            }
-                            // Text("$die1, $die2, $die3, $die4, $die5 $die6")
-                        }
+                        // Text("$die1, $die2, $die3, $die4, $die5 $die6")
                     }
                 }
             }
         }
     }
-@Composable
-fun MinimalDialog(onDismissRequest: () -> Unit) {
-    Dialog(onDismissRequest = { onDismissRequest() }) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .padding(16.dp),
-            shape = RoundedCornerShape(16.dp),
-        ) {
-            Text(
-                text = "This is a minimal dialog",
-                modifier = Modifier
-                    .fillMaxSize()
-                    .wrapContentSize(Alignment.Center),
-                textAlign = TextAlign.Center,
-            )
-        }
-    }
 }
 
 
+@Composable
+fun MinimalDialog() {
+    val showDialog = remember { mutableStateOf(false) }
+
+    Button(onClick = { showDialog.value = true }) {
+        Text("Show Dialog")
+    }
+
+    if (showDialog.value) {
+        AlertDialog(
+            onDismissRequest = { showDialog.value = false },
+            title = { Text("Simple Dialog") },
+            text = { Text("This is a simple Jetpack Compose dialog.") },
+            confirmButton = {
+                Button(onClick = { showDialog.value = false }) {
+                    Text("OK")
+                }
+            }
+        )
+    }
+}
+
+@Preview
+@Composable
+fun MinimalDialogPreview() {
+    MinimalDialog()
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropDownExample() {
+fun DropDownExample(): Int {
     val options = listOf("D4", "D6", "D8", "D10", "D12", "D20")
     var expanded by remember { mutableStateOf(false) }
     var selectedOptionText by remember { mutableStateOf(options[1]) }
+    var dieRandCap = 0
 
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded },
         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-    ) { TextField(
+    ) {
+        TextField(
             modifier = Modifier.menuAnchor(),
             readOnly = true,
             value = selectedOptionText,
@@ -287,6 +298,25 @@ fun DropDownExample() {
             }
         }
     }
+    if (selectedOptionText == "D4") {
+        dieRandCap = 4
+    }
+    else if (selectedOptionText == "D6") {
+        dieRandCap = 6
+    }
+    else if (selectedOptionText == "D8") {
+        dieRandCap = 8
+    }
+    else if (selectedOptionText == "D10") {
+        dieRandCap = 10
+    }
+    else if (selectedOptionText == "D12") {
+        dieRandCap = 12
+    }
+    else if (selectedOptionText == "D20") {
+        dieRandCap = 20
+    }
+    return dieRandCap
 }
 
 @Preview(showBackground = true)
