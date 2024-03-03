@@ -6,9 +6,14 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -42,6 +47,9 @@ fun RNGToolNavHost(
                 },
                 onNavigateToDiceMode = {
                     navController.navigate("DiceMode")
+                },
+                onNavigateToCardMode = {
+                    navController.navigate("CardMode")
                 }
             )
         }
@@ -87,7 +95,31 @@ fun RNGToolNavHost(
                     else -> null
                 }
             }
+
         ) { DiceMode(navController = navController)
+        }
+        composable(
+            "CardMode",
+            enterTransition = {
+                when (initialState.destination.route) {
+                    "MainMenu" ->
+                        slideInHorizontally(animationSpec = tween(300)) {
+                                fullWidth -> fullWidth / 1
+                        }
+                    else -> null
+                }
+            },
+            exitTransition = {
+                when (targetState.destination.route) {
+                    "MainMenu" ->
+                        slideOutHorizontally(animationSpec = tween(300)) {
+                                fullWidth -> fullWidth / 1
+                        }
+                    else -> null
+                }
+            }
+
+        ) { CardMode(navController = navController)
         }
     }
 }
@@ -97,6 +129,7 @@ fun RNGToolNavHost(
 fun MainMenu(
     onNavigateToNumberMode: () -> Unit,
     onNavigateToDiceMode: () -> Unit,
+    onNavigateToCardMode: () -> Unit,
     ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
@@ -108,7 +141,10 @@ fun MainMenu(
                 colors = TopAppBarDefaults.smallTopAppBarColors(),
                 title = {
                     Text("RNGTool")
-                })
+                },
+                actions = {
+                    AboutDialog()
+                },)
         }
     ) { contentPadding ->
         Column(
@@ -149,8 +185,52 @@ fun MainMenu(
                     }
                     Spacer(modifier = Modifier.weight(1f))
                 }
+                Button(onClick = onNavigateToCardMode,
+                    modifier = Modifier
+                        .padding(all = 8.dp)
+                        .fillMaxWidth(),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                    shape = RoundedCornerShape(10.dp),
+                    colors = ButtonDefaults.buttonColors(contentColor = MaterialTheme.colorScheme.primary, containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                ) {
+                    Row(modifier = Modifier.padding(all = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(rememberPlayingCards(), "Cards")
+                        Text("Card Mode", fontSize = 18.sp, modifier = Modifier.padding(horizontal = 8.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                }
             }
         }
+    }
+}
+
+@Composable
+fun AboutDialog() {
+    val showDialog = remember { mutableStateOf(false) }
+
+    IconButton(onClick = { showDialog.value = true }) {
+        Icon(
+            imageVector = Icons.Filled.Menu,
+            contentDescription = "Localized description"
+        )
+    }
+
+    if (showDialog.value) {
+        AlertDialog(
+            onDismissRequest = { showDialog.value = false },
+            title = { Text("About RNGTool Android") },
+            text = { Text("An Android app that generates random numbers." +
+                    "\n\nVersion 1.0\nSDK Version 34" +
+                    "\nNCX Programming" ) },
+            confirmButton = {
+                Button(onClick = { showDialog.value = false }) {
+                    Text("OK")
+                }
+            }
+        )
     }
 }
 
