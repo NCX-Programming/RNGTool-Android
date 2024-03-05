@@ -39,6 +39,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,6 +61,7 @@ fun CardMode(navController: NavHostController) {
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     var aceValue by remember { mutableIntStateOf(0) }
+    var switchValues by rememberSaveable(Unit) { mutableStateOf(listOf<Int>(0, 0)) }
 
 
     Scaffold(
@@ -94,6 +96,8 @@ fun CardMode(navController: NavHostController) {
                 icon = { Icon(Icons.Filled.Image, contentDescription = "") },
                 onClick = {
                     scope.launch {
+                        aceValue = switchValues[0]
+
                         if (aceValue == 1) {
                             snackbarHostState.showSnackbar("Aces are now equal to 11!")
                         } else if (aceValue == 0) {
@@ -123,13 +127,8 @@ fun CardMode(navController: NavHostController) {
                 var card5 by remember { mutableIntStateOf(0) }
                 var card6 by remember { mutableIntStateOf(0) }
                 var card7 by remember { mutableIntStateOf(0) }
-                var cardRandCap by remember { mutableIntStateOf(0) }
+                var cardRandCap by remember { mutableIntStateOf(13) }
 
-//                Image(
-//                    painter = painterResource(id = R.drawable.baseline_casino_24),
-//                    contentDescription = null,
-//
-//                    )
                 Icon(rememberDie(), "Dice")
 
                 Column {
@@ -157,7 +156,7 @@ fun CardMode(navController: NavHostController) {
                     }
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    aceValue = FilledCardExample()
+                    switchValues = FilledCardExample()
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Button(
@@ -188,6 +187,12 @@ fun CardMode(navController: NavHostController) {
                             card5 = 0
                             card6 = 0
                             card7 = 0
+
+                            println("aceValue: $aceValue")
+                            println("switchValues: $switchValues")
+//                            println("aceValue: $aceValue")
+//                            println("aceValue: $aceValue")
+//                            println("aceValue: $aceValue")
                         }) {
                         Text("Clear!")
                     }
@@ -214,7 +219,6 @@ fun CardMode(navController: NavHostController) {
                         } else if (sliderPosition.toInt() == 7) {
                             Text("$card1, $card2, $card3, $card4, $card5, $card6, $card7")
                         }
-                        // Text("$card1, $card2, $card3, $card4, $card5 $card6")
                     }
                 }
             }
@@ -223,14 +227,17 @@ fun CardMode(navController: NavHostController) {
 }
 
 @Composable
-fun FilledCardExample(): Int {
+fun FilledCardExample(): List<Int> {
     var aceValue by remember { mutableIntStateOf(0)}
+    var showFace by remember { mutableIntStateOf(0)}
+    var switchValues by rememberSaveable(Unit) { mutableStateOf(listOf<Int>(0, 0)) }
+
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
         modifier = Modifier
-            .size(width = 260.dp, height = 60.dp)
+            .size(width = 270.dp, height = 130.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
@@ -240,9 +247,19 @@ fun FilledCardExample(): Int {
                 textAlign = TextAlign.Left,
             )
             aceValue = AceSwitch()
+            switchValues[0].apply { aceValue }
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = "Show Face Cards?   ",
+                modifier = Modifier
+                    .padding(16.dp),
+                textAlign = TextAlign.Left,
+            )
+            showFace = FaceSwitch()
         }
     }
-    return aceValue
+    return switchValues
 }
 
 @Composable
@@ -285,13 +302,6 @@ fun AceSwitch(): Int {
         onCheckedChange = {
             checked = it
         },
-
-//        colors = SwitchDefaults.colors(
-//            checkedThumbColor = MaterialTheme.colorScheme.primary,
-//            checkedTrackColor = MaterialTheme.colorScheme.primaryContainer,
-//            uncheckedThumbColor = MaterialTheme.colorScheme.secondary,
-//            uncheckedTrackColor = MaterialTheme.colorScheme.secondaryContainer,
-//        )
     )
     if (checked) {
         aceValue = 1
@@ -300,6 +310,27 @@ fun AceSwitch(): Int {
     }
     return aceValue
 }
+
+@Composable
+fun FaceSwitch(): Int {
+    var checked by remember { mutableStateOf(false) }
+    var faceValue by remember { mutableIntStateOf(0)}
+
+    Switch(
+        modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
+        checked = checked,
+        onCheckedChange = {
+            checked = it
+        },
+    )
+    if (checked) {
+        faceValue = 1
+    } else if (!checked) {
+        faceValue = 0
+    }
+    return faceValue
+}
+
 
 @Preview
 @Composable
