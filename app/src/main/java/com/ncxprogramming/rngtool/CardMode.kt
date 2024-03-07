@@ -61,7 +61,7 @@ fun CardMode(navController: NavHostController) {
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     var aceValue by remember { mutableIntStateOf(0) }
-    var switchValues by rememberSaveable(Unit) { mutableStateOf(listOf<Int>(0, 0)) }
+    var switchValues by rememberSaveable(Unit) { mutableStateOf(arrayOf<Int>(0, 0)) }
 
 
     Scaffold(
@@ -119,6 +119,7 @@ fun CardMode(navController: NavHostController) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                var cards by remember { mutableStateOf(arrayOf<Int>(0, 0, 0, 0, 0, 0, 0)) }
                 var sliderPosition by remember { mutableFloatStateOf(1f) }
                 var card1 by remember { mutableIntStateOf(0) }
                 var card2 by remember { mutableIntStateOf(0) }
@@ -128,6 +129,7 @@ fun CardMode(navController: NavHostController) {
                 var card6 by remember { mutableIntStateOf(0) }
                 var card7 by remember { mutableIntStateOf(0) }
                 var cardRandCap by remember { mutableIntStateOf(13) }
+                var cardsString = ""
 
                 Icon(rememberDie(), "Dice")
 
@@ -156,6 +158,36 @@ fun CardMode(navController: NavHostController) {
                     }
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
+                    Button(
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
+                        onClick = {
+
+                        }) {
+
+                        if (sliderPosition.toInt() == 1) {
+                            Text("$cards[0]")
+                        } else if (sliderPosition.toInt() == 2) {
+                            Text("$cards[0], $cards[1]")
+                        } else if (sliderPosition.toInt() == 3) {
+                            Text("$cards[0], $cards[1], $cards[2]")
+                        } else if (sliderPosition.toInt() == 4) {
+                            Text("$cards[0], $cards[1], $cards[2], $cards[3]")
+                        } else if (round(sliderPosition).toInt() == 5) {
+                            Text("$cards[0], $cards[1], $cards[2], $cards[3], $cards[4]")
+                        } else if (round(sliderPosition).toInt() == 6) {
+                            Text("$cards[0], $cards[1], $cards[2], $cards[3], $cards[4], $cards[5]")
+                        } else if (sliderPosition.toInt() == 7) {
+                            cardsString = ""
+
+                            for (card in cards) {
+                                cardsString = cardsString + cards[card]
+                            }
+
+                            Text("$cardsString")
+                        }
+                    }
+                }
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     switchValues = FilledCardExample()
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -163,6 +195,9 @@ fun CardMode(navController: NavHostController) {
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
                         onClick = {
                             println("Slider Position is: $sliderPosition")
+                            for (card in cards) {
+                                cards[card] = (1..cardRandCap).random()
+                            }
 
                             card1 = (1..cardRandCap).random()
                             card2 = (1..cardRandCap).random()
@@ -180,13 +215,9 @@ fun CardMode(navController: NavHostController) {
                     Button(
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
                         onClick = {
-                            card1 = 0
-                            card2 = 0
-                            card3 = 0
-                            card4 = 0
-                            card5 = 0
-                            card6 = 0
-                            card7 = 0
+                            for (card in cards) {
+                                cards[card] = 0
+                            }
 
                             println("aceValue: $aceValue")
                             println("switchValues: $switchValues")
@@ -197,40 +228,16 @@ fun CardMode(navController: NavHostController) {
                         Text("Clear!")
                     }
                 }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Button(
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
-                        onClick = {
-
-                        }) {
-
-                        if (sliderPosition.toInt() == 1) {
-                            Text("$card1")
-                        } else if (sliderPosition.toInt() == 2) {
-                            Text("$card1, $card2")
-                        } else if (sliderPosition.toInt() == 3) {
-                            Text("$card1, $card2, $card3")
-                        } else if (sliderPosition.toInt() == 4) {
-                            Text("$card1, $card2, $card3, $card4")
-                        } else if (round(sliderPosition).toInt() == 5) {
-                            Text("$card1, $card2, $card3, $card4, $card5")
-                        } else if (round(sliderPosition).toInt() == 6) {
-                            Text("$card1, $card2, $card3, $card4, $card5, $card6")
-                        } else if (sliderPosition.toInt() == 7) {
-                            Text("$card1, $card2, $card3, $card4, $card5, $card6, $card7")
-                        }
-                    }
-                }
             }
         }
     }
 }
 
 @Composable
-fun FilledCardExample(): List<Int> {
+fun FilledCardExample(): Array<Int> {
     var aceValue by remember { mutableIntStateOf(0)}
     var showFace by remember { mutableIntStateOf(0)}
-    var switchValues by rememberSaveable(Unit) { mutableStateOf(listOf<Int>(0, 0)) }
+    var switchValues = arrayOf(0, 0)
 
     Card(
         colors = CardDefaults.cardColors(
@@ -247,7 +254,7 @@ fun FilledCardExample(): List<Int> {
                 textAlign = TextAlign.Left,
             )
             aceValue = AceSwitch()
-            switchValues[0].apply { aceValue }
+            switchValues[0] = aceValue
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
@@ -257,6 +264,7 @@ fun FilledCardExample(): List<Int> {
                 textAlign = TextAlign.Left,
             )
             showFace = FaceSwitch()
+            switchValues[1] = showFace
         }
     }
     return switchValues
