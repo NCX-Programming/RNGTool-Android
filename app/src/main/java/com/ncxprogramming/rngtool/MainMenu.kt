@@ -4,13 +4,25 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.rounded.*
-import androidx.compose.material3.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,6 +62,9 @@ fun RNGToolNavHost(
                 },
                 onNavigateToCardMode = {
                     navController.navigate("CardMode")
+                },
+                onNavigateToMarbleMode = {
+                    navController.navigate("MarbleMode")
                 }
             )
         }
@@ -121,6 +136,29 @@ fun RNGToolNavHost(
 
         ) { CardMode(navController = navController)
         }
+        composable(
+            "MarbleMode",
+            enterTransition = {
+                when (initialState.destination.route) {
+                    "MainMenu" ->
+                        slideInHorizontally(animationSpec = tween(300)) {
+                                fullWidth -> fullWidth / 1
+                        }
+                    else -> null
+                }
+            },
+            exitTransition = {
+                when (targetState.destination.route) {
+                    "MainMenu" ->
+                        slideOutHorizontally(animationSpec = tween(300)) {
+                                fullWidth -> fullWidth / 1
+                        }
+                    else -> null
+                }
+            }
+
+        ) { MarbleMode(navController = navController)
+        }
     }
 }
 
@@ -130,6 +168,7 @@ fun MainMenu(
     onNavigateToNumberMode: () -> Unit,
     onNavigateToDiceMode: () -> Unit,
     onNavigateToCardMode: () -> Unit,
+    onNavigateToMarbleMode: () -> Unit,
     ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
@@ -196,8 +235,25 @@ fun MainMenu(
                     Row(modifier = Modifier.padding(all = 4.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(rememberPlayingCards(), "Cards")
+                        Icon(rememberLooksOne(), "Cards")
                         Text("Card Mode", fontSize = 18.sp, modifier = Modifier.padding(horizontal = 8.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+                Button(onClick = onNavigateToMarbleMode,
+                    modifier = Modifier
+                        .padding(all = 8.dp)
+                        .fillMaxWidth(),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                    shape = RoundedCornerShape(10.dp),
+                    colors = ButtonDefaults.buttonColors(contentColor = MaterialTheme.colorScheme.primary, containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                ) {
+                    Row(modifier = Modifier.padding(all = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(rememberCircle(), "Circle")
+                        Text("Marble Mode", fontSize = 18.sp, modifier = Modifier.padding(horizontal = 8.dp)
                         )
                     }
                     Spacer(modifier = Modifier.weight(1f))

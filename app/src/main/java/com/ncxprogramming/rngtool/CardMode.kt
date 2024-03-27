@@ -7,17 +7,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -27,9 +22,7 @@ import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -50,7 +43,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.ncxprogramming.rngtool.ui.theme.RNGToolTheme
-import kotlinx.coroutines.launch
 import kotlin.math.round
 import kotlin.math.roundToInt
 
@@ -58,9 +50,9 @@ import kotlin.math.roundToInt
 @Composable
 fun CardMode(navController: NavHostController) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val scope = rememberCoroutineScope()
+    rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
-    var aceValue by remember { mutableIntStateOf(0) }
+    val aceValue by remember { mutableIntStateOf(0) }
     var switchValues by rememberSaveable(Unit) { mutableStateOf(arrayOf<Int>(0, 0)) }
 
 
@@ -83,32 +75,32 @@ fun CardMode(navController: NavHostController) {
                 },
                 actions = {
                     CardAboutDialog()
-                    AboutDialog()
+                    // AboutDialog()
                 }
             )
         },
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                text = { Text("Show snackbar") },
-                icon = { Icon(Icons.Filled.Image, contentDescription = "") },
-                onClick = {
-                    scope.launch {
-                        aceValue = switchValues[0]
-
-                        if (aceValue == 1) {
-                            snackbarHostState.showSnackbar("Aces are now equal to 11!")
-                        } else if (aceValue == 0) {
-                            snackbarHostState.showSnackbar("Aces are now equal to 1!")
-                        } else {
-                            snackbarHostState.showSnackbar("Ace Value currently unknown!")
-                        }
-                    }
-                }
-            )
-        }
+//        floatingActionButton = {
+//            ExtendedFloatingActionButton(
+//                text = { Text("Show snackbar") },
+//                icon = { Icon(Icons.Filled.Image, contentDescription = "") },
+//                onClick = {
+//                    scope.launch {
+//                        aceValue = switchValues[0]
+//
+//                        if (aceValue == 1) {
+//                            snackbarHostState.showSnackbar("Aces are now equal to 11!")
+//                        } else if (aceValue == 0) {
+//                            snackbarHostState.showSnackbar("Aces are now equal to 1!")
+//                        } else {
+//                            snackbarHostState.showSnackbar("Ace Value currently unknown!")
+//                        }
+//                    }
+//                }
+//            )
+//        }
 
     ) { contentPadding ->
         Column(
@@ -119,17 +111,9 @@ fun CardMode(navController: NavHostController) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                var cards by remember { mutableStateOf(arrayOf<Int>(0, 0, 0, 0, 0, 0, 0)) }
+                val cards by remember { mutableStateOf(arrayOf<Int>(0, 0, 0, 0, 0, 0, 0)) }
                 var sliderPosition by remember { mutableFloatStateOf(1f) }
-                var card1 by remember { mutableIntStateOf(0) }
-                var card2 by remember { mutableIntStateOf(0) }
-                var card3 by remember { mutableIntStateOf(0) }
-                var card4 by remember { mutableIntStateOf(0) }
-                var card5 by remember { mutableIntStateOf(0) }
-                var card6 by remember { mutableIntStateOf(0) }
-                var card7 by remember { mutableIntStateOf(0) }
-                var cardRandCap by remember { mutableIntStateOf(13) }
-                var cardsString = ""
+                remember { mutableStateOf(cards.contentToString()) }
 
                 Icon(rememberDie(), "Dice")
 
@@ -177,13 +161,7 @@ fun CardMode(navController: NavHostController) {
                         } else if (round(sliderPosition).toInt() == 6) {
                             Text("$cards[0], $cards[1], $cards[2], $cards[3], $cards[4], $cards[5]")
                         } else if (sliderPosition.toInt() == 7) {
-                            cardsString = ""
-
-                            for (card in cards) {
-                                cardsString = cardsString + cards[card]
-                            }
-
-                            Text("$cardsString")
+                            Text(cards.contentToString())
                         }
                     }
                 }
@@ -195,19 +173,15 @@ fun CardMode(navController: NavHostController) {
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
                         onClick = {
                             println("Slider Position is: $sliderPosition")
-                            for (card in cards) {
-                                cards[card] = (1..cardRandCap).random()
+                            var index = 0
+                            while (index < cards.size) {
+                                cards[index] = (1..13).random()
+                                println(index)
+                                index++
                             }
 
-                            card1 = (1..cardRandCap).random()
-                            card2 = (1..cardRandCap).random()
-                            card3 = (1..cardRandCap).random()
-                            card4 = (1..cardRandCap).random()
-                            card5 = (1..cardRandCap).random()
-                            card6 = (1..cardRandCap).random()
-                            card7 = (1..cardRandCap).random()
-
-                            println("$card1, $card2, $card3, $card4, $card5, $card6, $card7")
+                            println(cards.contentToString())
+                        
 
                         }) {
                         Text("Deal!")
@@ -233,11 +207,18 @@ fun CardMode(navController: NavHostController) {
     }
 }
 
+//fun CardString(cards): () -> Unit {
+//    var cards = {}
+//
+//
+//    return cards
+//}
+
 @Composable
 fun FilledCardExample(): Array<Int> {
     var aceValue by remember { mutableIntStateOf(0)}
     var showFace by remember { mutableIntStateOf(0)}
-    var switchValues = arrayOf(0, 0)
+    val switchValues = arrayOf(0, 0)
 
     Card(
         colors = CardDefaults.cardColors(
@@ -350,59 +331,6 @@ fun AceSwitchPreview() {
 @Composable
 fun MinimalDialogPreviewCard() {
     CardAboutDialog()
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun dropDownExample(): Int {
-    val options = listOf("D4", "D6", "D8", "D10", "D12", "D20")
-    var expanded by remember { mutableStateOf(false) }
-    var selectedOptionText by remember { mutableStateOf(options[1]) }
-    var cardRandCap = 0
-
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded },
-        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-    ) {
-        TextField(
-            modifier = Modifier.menuAnchor(),
-            readOnly = true,
-            value = selectedOptionText,
-            onValueChange = {},
-            label = { Text("Dice Selector") },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            colors = ExposedDropdownMenuDefaults.textFieldColors(),
-        )
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-        ) {
-            options.forEach { selectionOption ->
-                DropdownMenuItem(
-                    text = { Text(selectionOption) },
-                    onClick = {
-                        selectedOptionText = selectionOption
-                        expanded = false
-                    },
-                )
-            }
-        }
-    }
-    if (selectedOptionText == "D4") {
-        cardRandCap = 4
-    } else if (selectedOptionText == "D6") {
-        cardRandCap = 6
-    } else if (selectedOptionText == "D8") {
-        cardRandCap = 8
-    } else if (selectedOptionText == "D10") {
-        cardRandCap = 10
-    } else if (selectedOptionText == "D12") {
-        cardRandCap = 12
-    } else if (selectedOptionText == "D20") {
-        cardRandCap = 20
-    }
-    return cardRandCap
 }
 
 @Preview(showBackground = true)
