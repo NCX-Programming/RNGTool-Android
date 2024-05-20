@@ -141,8 +141,6 @@ fun CardMode(navController: NavHostController) {
                             card6 = (1..cardRandCap).random()
                             card7 = (1..cardRandCap).random()
 
-                            println("$card1, $card2, $card3, $card4, $card5, $card6, $card7")
-
                         }) {
                         Text("Deal!")
                     }
