@@ -19,7 +19,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -32,28 +31,29 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.ncxprogramming.rngtool.ui.theme.RNGToolTheme
-import kotlin.math.round
 import kotlin.math.roundToInt
+
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun CardMode(navController: NavHostController) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    rememberCoroutineScope()
+    val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val aceValue by remember { mutableIntStateOf(0) }
-    var switchValues by rememberSaveable(Unit) { mutableStateOf(arrayOf<Int>(0, 0)) }
+    var switchValues by remember { mutableStateOf(Array<Boolean>(2) { false }) }
 
 
     Scaffold(
@@ -75,32 +75,9 @@ fun CardMode(navController: NavHostController) {
                 },
                 actions = {
                     CardAboutDialog()
-                    // AboutDialog()
                 }
             )
-        },
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState)
-        },
-//        floatingActionButton = {
-//            ExtendedFloatingActionButton(
-//                text = { Text("Show snackbar") },
-//                icon = { Icon(Icons.Filled.Image, contentDescription = "") },
-//                onClick = {
-//                    scope.launch {
-//                        aceValue = switchValues[0]
-//
-//                        if (aceValue == 1) {
-//                            snackbarHostState.showSnackbar("Aces are now equal to 11!")
-//                        } else if (aceValue == 0) {
-//                            snackbarHostState.showSnackbar("Aces are now equal to 1!")
-//                        } else {
-//                            snackbarHostState.showSnackbar("Ace Value currently unknown!")
-//                        }
-//                    }
-//                }
-//            )
-//        }
+        }
 
     ) { contentPadding ->
         Column(
@@ -111,11 +88,17 @@ fun CardMode(navController: NavHostController) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                val cards by remember { mutableStateOf(arrayOf<Int>(0, 0, 0, 0, 0, 0, 0)) }
                 var sliderPosition by remember { mutableFloatStateOf(1f) }
-                remember { mutableStateOf(cards.contentToString()) }
+                var card1 by remember { mutableIntStateOf(0) }
+                var card2 by remember { mutableIntStateOf(0) }
+                var card3 by remember { mutableIntStateOf(0) }
+                var card4 by remember { mutableIntStateOf(0) }
+                var card5 by remember { mutableIntStateOf(0) }
+                var card6 by remember { mutableIntStateOf(0) }
+                var card7 by remember { mutableIntStateOf(0) }
+                val cardRandCap by remember { mutableIntStateOf(13) }
 
-                Icon(rememberDie(), "Dice")
+                FinalRandom(sliderPosition, card1, card2, card3, card4, card5, card6, card7, switchValues)
 
                 Column {
 
@@ -142,46 +125,23 @@ fun CardMode(navController: NavHostController) {
                     }
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Button(
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
-                        onClick = {
-
-                        }) {
-
-                        if (sliderPosition.toInt() == 1) {
-                            Text("$cards[0]")
-                        } else if (sliderPosition.toInt() == 2) {
-                            Text("$cards[0], $cards[1]")
-                        } else if (sliderPosition.toInt() == 3) {
-                            Text("$cards[0], $cards[1], $cards[2]")
-                        } else if (sliderPosition.toInt() == 4) {
-                            Text("$cards[0], $cards[1], $cards[2], $cards[3]")
-                        } else if (round(sliderPosition).toInt() == 5) {
-                            Text("$cards[0], $cards[1], $cards[2], $cards[3], $cards[4]")
-                        } else if (round(sliderPosition).toInt() == 6) {
-                            Text("$cards[0], $cards[1], $cards[2], $cards[3], $cards[4], $cards[5]")
-                        } else if (sliderPosition.toInt() == 7) {
-                            Text(cards.contentToString())
-                        }
-                    }
-                }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    switchValues = FilledCardExample()
+                    switchValues = FilledCardExample(snackbarHostState)
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Button(
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
                         onClick = {
                             println("Slider Position is: $sliderPosition")
-                            var index = 0
-                            while (index < cards.size) {
-                                cards[index] = (1..13).random()
-                                println(index)
-                                index++
-                            }
 
-                            println(cards.contentToString())
-                        
+                            card1 = (1..cardRandCap).random()
+                            card2 = (1..cardRandCap).random()
+                            card3 = (1..cardRandCap).random()
+                            card4 = (1..cardRandCap).random()
+                            card5 = (1..cardRandCap).random()
+                            card6 = (1..cardRandCap).random()
+                            card7 = (1..cardRandCap).random()
+
+                            println("$card1, $card2, $card3, $card4, $card5, $card6, $card7")
 
                         }) {
                         Text("Deal!")
@@ -189,9 +149,13 @@ fun CardMode(navController: NavHostController) {
                     Button(
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
                         onClick = {
-                            for (card in cards) {
-                                cards[card] = 0
-                            }
+                            card1 = 0
+                            card2 = 0
+                            card3 = 0
+                            card4 = 0
+                            card5 = 0
+                            card6 = 0
+                            card7 = 0
 
                             println("aceValue: $aceValue")
                             println("switchValues: $switchValues")
@@ -202,23 +166,135 @@ fun CardMode(navController: NavHostController) {
                         Text("Clear!")
                     }
                 }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+//                    DealtCardButton(sliderPosition, card1, card2, card3, card4, card5, card6, card7, switchValues)
+                }
             }
         }
     }
 }
 
-//fun CardString(cards): () -> Unit {
-//    var cards = {}
-//
-//
-//    return cards
-//}
+@Composable
+private fun FinalRandom(
+    sliderPosition: Float,
+    card1: Int,
+    card2: Int,
+    card3: Int,
+    card4: Int,
+    card5: Int,
+    card6: Int,
+    card7: Int,
+    switchValues: Array<Boolean>
+) {
+    var cardStrings by remember { mutableStateOf("") }
+    var cards = emptyArray<Int>()
+//    val gradientColors = listOf(md_theme_dark_tertiary, md_theme_dark_tertiaryContainer, md_theme_dark_onSecondary /*...*/)
+
+    cards += card1
+    cards += card2
+    cards += card3
+    cards += card4
+    cards += card5
+    cards += card6
+    cards += card7
+    cardStrings = CardString(sliderPosition.toInt(), cards, switchValues)
+
+    Text(
+        "$cardStrings",
+        fontSize = 42.sp,
+        fontWeight = FontWeight.Bold
+    )
+}
+
+fun CardString(
+    cardAmount: Int,
+    cards: Array<Int>,
+    switchValues: Array<Boolean>
+): String {
+    val sarray = Array(cardAmount) { "" }
+    var cs = "" // card string
+    var x = 0 // iterator
+    val ab = switchValues[0] // ace boolean
+    val fb = switchValues[1] // face boolean
+
+    while (x < cardAmount) {
+        sarray[x] = cards[x].toString()
+        x++
+    }
+
+    x = 0
+
+//    print("\n\n[line 223] sarray = ")
+//    for (s in sarray) {
+//        print("$s, ")
+//    }
+//    print("[line 227] sarray.size = ")
+//    print(sarray.size)
+//    print("\n[line 233] ab = $ab")
+//    print("\n[line 234] fb = $fb")
+//    print("\n\n")
+
+    while (x < sarray.size) {
+        if (fb) {
+            if (sarray[x] == "11") {
+                sarray[x] = "J"
+            } else if (sarray[x] == "12") {
+                sarray[x] = "Q"
+            } else if (sarray[x] == "13") {
+                sarray[x] = "K"
+            }
+        } else if (!fb) {
+            if (sarray[x] == "11") {
+                sarray[x] = "10"
+            } else if (sarray[x] == "12") {
+                sarray[x] = "10"
+            } else if (sarray[x] == "13") {
+                sarray[x] = "10"
+            }
+        }
+        if (ab) {
+            if (sarray[x] == "1") {
+                if (!fb) {
+                    sarray[x] = "11"
+                } else if (fb) {
+                    sarray[x] = "A"
+                }
+            }
+        } else if (!ab) {
+            if (sarray[x] == "1") {
+                if (!fb) {
+                    sarray[x] = "1"
+                } else if (fb) {
+                    sarray[x] = "A"
+                }
+            }
+        }
+
+        if (x < sarray.size - 1) {
+            cs = cs + sarray[x] + ", "
+        } else {
+            cs += sarray[x]
+        }
+
+        print("\n[line 261] sarray = ")
+        for (s in sarray) {
+            print("$s, ")
+        }
+        print("\n[line 265] cs = $cs")
+        print("\n[line 266] ab = $ab")
+        print("\n")
+
+        x++
+    }
+
+    return cs
+}
 
 @Composable
-fun FilledCardExample(): Array<Int> {
-    var aceValue by remember { mutableIntStateOf(0)}
-    var showFace by remember { mutableIntStateOf(0)}
-    val switchValues = arrayOf(0, 0)
+fun FilledCardExample(snackbarHostState: SnackbarHostState): Array<Boolean> {
+    var aceValue by remember { mutableStateOf(false) }
+    var showFace by remember { mutableStateOf(false) }
+    var switchValues by remember { mutableStateOf(Array<Boolean>(2) { false }) }
 
     Card(
         colors = CardDefaults.cardColors(
@@ -248,6 +324,8 @@ fun FilledCardExample(): Array<Int> {
             switchValues[1] = showFace
         }
     }
+    println(switchValues[0])
+    println(switchValues[1])
     return switchValues
 }
 
@@ -278,44 +356,54 @@ fun CardAboutDialog() {
     }
 }
 
-
-
 @Composable
-fun AceSwitch(): Int {
+fun AceSwitch(): Boolean {
     var checked by remember { mutableStateOf(false) }
-    var aceValue by remember { mutableIntStateOf(0)}
+    var aceValue by remember { mutableStateOf(false) }
+
 
     Switch(
         modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
         checked = checked,
         onCheckedChange = {
-            checked = it
+            if (checked) {
+                checked = false
+            } else {
+                checked = true
+            }
+            println("Face Switched\n[line 358] checked = $checked")
+
         },
     )
     if (checked) {
-        aceValue = 1
+        aceValue = true
     } else if (!checked) {
-        aceValue = 0
+        aceValue = false
     }
     return aceValue
 }
 
 @Composable
-fun FaceSwitch(): Int {
+fun FaceSwitch(): Boolean {
     var checked by remember { mutableStateOf(false) }
-    var faceValue by remember { mutableIntStateOf(0)}
+    var faceValue by remember { mutableStateOf(false) }
 
     Switch(
         modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
         checked = checked,
         onCheckedChange = {
-            checked = it
+            if (checked) {
+                checked = false
+            } else {
+                checked = true
+            }
+            println("Ace Switched\n[line 384] checked = $checked")
         },
     )
     if (checked) {
-        faceValue = 1
+        faceValue = true
     } else if (!checked) {
-        faceValue = 0
+        faceValue = false
     }
     return faceValue
 }

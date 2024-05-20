@@ -30,8 +30,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.ncxprogramming.rngtool.ui.theme.RNGToolTheme
@@ -60,7 +62,6 @@ fun MarbleMode(navController: NavHostController) {
                 },
                 actions = {
                     MarbleAboutDialog()
-                    // AboutDialog()
                 },
 
                 )
@@ -96,7 +97,7 @@ fun MarbleMode(navController: NavHostController) {
 //                    contentDescription = null,
 //
 //                    )
-                Icon(rememberDie(), "Marble")
+                FinalRandom(sliderPosition, die1, die2, die3, die4, die5)
 
                 Column {
 
@@ -155,29 +156,50 @@ fun MarbleMode(navController: NavHostController) {
                         Text("Clear!")
                     }
                 }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Button(
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
-                        onClick = {
-
-                        }) {
-
-                        if (sliderPosition.toInt() == 1) {
-                            Text(die1)
-                        } else if (sliderPosition.toInt() == 2) {
-                            Text("$die1, $die2")
-                        } else if (sliderPosition.toInt() == 3) {
-                            Text("$die1, $die2, $die3")
-                        } else if (sliderPosition.toInt() == 4) {
-                            Text("$die1, $die2, $die3, $die4")
-                        } else if (sliderPosition.toInt() == 5) {
-                            Text("$die1, $die2, $die3, $die4, $die5")
-                        }
-                        // Text("$die1, $die2, $die3, $die4, $die5 $die6")
-                    }
-                }
             }
         }
+    }
+}
+
+@Composable
+fun FinalRandom(
+    sliderPosition: Float,
+    die1: String,
+    die2: String,
+    die3: String,
+    die4: String,
+    die5: String
+) {
+    if (sliderPosition.toInt() == 1) {
+        Text(
+            text = "$die1",
+            fontSize = 42.sp,
+            fontWeight = FontWeight.Bold
+        )
+    } else if (sliderPosition.toInt() == 2) {
+        Text(
+            text = "$die1, $die2",
+            fontSize = 42.sp,
+            fontWeight = FontWeight.Bold
+        )
+    } else if (sliderPosition.toInt() == 3) {
+        Text(
+            text = "$die1, $die2, $die3",
+            fontSize = 42.sp,
+            fontWeight = FontWeight.Bold
+        )
+    } else if (sliderPosition.toInt() == 4) {
+        Text(
+            text = "$die1, $die2, $die3, $die4",
+            fontSize = 42.sp,
+            fontWeight = FontWeight.Bold
+        )
+    } else if (sliderPosition.toInt() == 5) {
+        Text(
+            text = "$die1, $die2, $die3, $die4, $die5",
+            fontSize = 42.sp,
+            fontWeight = FontWeight.Bold
+        )
     }
 }
 
