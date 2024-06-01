@@ -16,3 +16,5 @@ Generate up to 5 random numbers and letters using marbles.
 - At least Android 8.0 or higher
 ## Installation
 RNGTool Android is still in early beta, but you can find development builds in ![Github Actions](https://github.com/NCX-Programming/RNGTool-Android/actions) that you can install on your Android device.
+## Additional Notes
+This branch is not going to receive later updates because this is a one-off thing, so don't actually use this.
