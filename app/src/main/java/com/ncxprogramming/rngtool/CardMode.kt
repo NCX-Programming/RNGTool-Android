@@ -35,6 +35,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -125,7 +128,7 @@ fun CardMode(navController: NavHostController) {
                     }
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    switchValues = FilledCardExample(snackbarHostState)
+                    switchValues = settingsCard()
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Button(
@@ -140,6 +143,14 @@ fun CardMode(navController: NavHostController) {
                             card5 = (1..cardRandCap).random()
                             card6 = (1..cardRandCap).random()
                             card7 = (1..cardRandCap).random()
+
+//                            card1 = 12
+//                            card2 = 12
+//                            card3 = 12
+//                            card4 = 12
+//                            card5 = 12
+//                            card6 = 12
+//                            card7 = 12
 
                         }) {
                         Text("Deal!")
@@ -164,9 +175,6 @@ fun CardMode(navController: NavHostController) {
                         Text("Clear!")
                     }
                 }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-//                    DealtCardButton(sliderPosition, card1, card2, card3, card4, card5, card6, card7, switchValues)
-                }
             }
         }
     }
@@ -185,8 +193,10 @@ private fun FinalRandom(
     switchValues: Array<Boolean>
 ) {
     var cardStrings by remember { mutableStateOf("") }
-    var cards = emptyArray<Int>()
-//    val gradientColors = listOf(md_theme_dark_tertiary, md_theme_dark_tertiaryContainer, md_theme_dark_onSecondary /*...*/)
+    val cards = emptyList<Int>().toMutableList()
+    val density = LocalDensity.current
+    val configuration = LocalConfiguration.current
+    val screenWidthPx = with(density) { configuration.screenWidthDp.dp.roundToPx() }
 
     cards += card1
     cards += card2
@@ -195,101 +205,21 @@ private fun FinalRandom(
     cards += card5
     cards += card6
     cards += card7
-    cardStrings = CardString(sliderPosition.toInt(), cards, switchValues)
+    cardStrings = JavaMethods.CardString(sliderPosition.toInt(), cards, switchValues).toString()
 
     Text(
-        "$cardStrings",
-        fontSize = 42.sp,
-        fontWeight = FontWeight.Bold
+        text = cardStrings,
+        fontSize = (screenWidthPx/36).sp,
+        style = TextStyle(fontSize = 42.sp),
+        fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth()
     )
-}
 
-fun CardString(
-    cardAmount: Int,
-    cards: Array<Int>,
-    switchValues: Array<Boolean>
-): String {
-    val sarray = Array(cardAmount) { "" }
-    var cs = "" // card string
-    var x = 0 // iterator
-    val ab = switchValues[0] // ace boolean
-    val fb = switchValues[1] // face boolean
-
-    while (x < cardAmount) {
-        sarray[x] = cards[x].toString()
-        x++
-    }
-
-    x = 0
-
-//    print("\n\n[line 223] sarray = ")
-//    for (s in sarray) {
-//        print("$s, ")
-//    }
-//    print("[line 227] sarray.size = ")
-//    print(sarray.size)
-//    print("\n[line 233] ab = $ab")
-//    print("\n[line 234] fb = $fb")
-//    print("\n\n")
-
-    while (x < sarray.size) {
-        if (fb) {
-            if (sarray[x] == "11") {
-                sarray[x] = "J"
-            } else if (sarray[x] == "12") {
-                sarray[x] = "Q"
-            } else if (sarray[x] == "13") {
-                sarray[x] = "K"
-            }
-        } else if (!fb) {
-            if (sarray[x] == "11") {
-                sarray[x] = "10"
-            } else if (sarray[x] == "12") {
-                sarray[x] = "10"
-            } else if (sarray[x] == "13") {
-                sarray[x] = "10"
-            }
-        }
-        if (ab) {
-            if (sarray[x] == "1") {
-                if (!fb) {
-                    sarray[x] = "11"
-                } else if (fb) {
-                    sarray[x] = "A"
-                }
-            }
-        } else if (!ab) {
-            if (sarray[x] == "1") {
-                if (!fb) {
-                    sarray[x] = "1"
-                } else if (fb) {
-                    sarray[x] = "A"
-                }
-            }
-        }
-
-        if (x < sarray.size - 1) {
-            cs = cs + sarray[x] + ", "
-        } else {
-            cs += sarray[x]
-        }
-
-        print("\n[line 261] sarray = ")
-        for (s in sarray) {
-            print("$s, ")
-        }
-        print("\n[line 265] cs = $cs")
-        print("\n[line 266] ab = $ab")
-        print("\n")
-
-        x++
-    }
-
-    return cs
 }
 
 @Composable
-fun FilledCardExample(snackbarHostState: SnackbarHostState): Array<Boolean> {
+fun settingsCard(): Array<Boolean> {
     var aceValue by remember { mutableStateOf(false) }
     var showFace by remember { mutableStateOf(false) }
     var switchValues by remember { mutableStateOf(Array<Boolean>(2) { false }) }
@@ -308,17 +238,17 @@ fun FilledCardExample(snackbarHostState: SnackbarHostState): Array<Boolean> {
                     .padding(16.dp),
                 textAlign = TextAlign.Left,
             )
-            aceValue = AceSwitch()
+            aceValue = aceSwitch()
             switchValues[0] = aceValue
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = "Show Face Cards?   ",
+                text = "Show Point Value?   ",
                 modifier = Modifier
                     .padding(16.dp),
                 textAlign = TextAlign.Left,
             )
-            showFace = FaceSwitch()
+            showFace = faceSwitch()
             switchValues[1] = showFace
         }
     }
@@ -355,7 +285,7 @@ fun CardAboutDialog() {
 }
 
 @Composable
-fun AceSwitch(): Boolean {
+fun aceSwitch(): Boolean {
     var checked by remember { mutableStateOf(false) }
     var aceValue by remember { mutableStateOf(false) }
 
@@ -382,7 +312,7 @@ fun AceSwitch(): Boolean {
 }
 
 @Composable
-fun FaceSwitch(): Boolean {
+fun faceSwitch(): Boolean {
     var checked by remember { mutableStateOf(false) }
     var faceValue by remember { mutableStateOf(false) }
 
@@ -404,19 +334,6 @@ fun FaceSwitch(): Boolean {
         faceValue = false
     }
     return faceValue
-}
-
-
-@Preview
-@Composable
-fun AceSwitchPreview() {
-    AceSwitch()
-}
-
-@Preview
-@Composable
-fun MinimalDialogPreviewCard() {
-    CardAboutDialog()
 }
 
 @Preview(showBackground = true)

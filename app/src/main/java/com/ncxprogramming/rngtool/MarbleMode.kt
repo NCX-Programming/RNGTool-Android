@@ -92,11 +92,6 @@ fun MarbleMode(navController: NavHostController) {
                 var die5 by remember { mutableStateOf("A") }
                 var die6 by remember { mutableStateOf("A") }
 
-//                Image(
-//                    painter = painterResource(id = R.drawable.baseline_casino_24),
-//                    contentDescription = null,
-//
-//                    )
                 FinalRandom(sliderPosition, die1, die2, die3, die4, die5)
 
                 Column {
@@ -131,12 +126,12 @@ fun MarbleMode(navController: NavHostController) {
                         onClick = {
                             println("Slider Position is: $sliderPosition")
 
-                            die1 = NumToLetter()
-                            die2 = NumToLetter()
-                            die3 = NumToLetter()
-                            die4 = NumToLetter()
-                            die5 = NumToLetter()
-                            die6 = NumToLetter()
+                            die1 = JavaMethods.NumToLetter()
+                            die2 = JavaMethods.NumToLetter()
+                            die3 = JavaMethods.NumToLetter()
+                            die4 = JavaMethods.NumToLetter()
+                            die5 = JavaMethods.NumToLetter()
+                            die6 = JavaMethods.NumToLetter()
 
                             println("$die1, $die2, $die3, $die4, $die5, $die6")
 
@@ -203,42 +198,6 @@ fun FinalRandom(
     }
 }
 
-fun NumToLetter(): String {
-    var marble = ""
-    val letterChooser = (1..26).random()
-
-    when (letterChooser) {
-        1 -> marble = "A"
-        2 -> marble = "B"
-        3 -> marble = "C"
-        4 -> marble = "D"
-        5 -> marble = "E"
-        6 -> marble = "F"
-        7 -> marble = "G"
-        8 -> marble = "H"
-        9 -> marble = "I"
-        10 -> marble = "J"
-        11 -> marble = "K"
-        12 -> marble = "L"
-        13 -> marble = "M"
-        14 -> marble = "N"
-        15 -> marble = "O"
-        16 -> marble = "P"
-        17 -> marble = "Q"
-        18 -> marble = "R"
-        19 -> marble = "S"
-        20 -> marble = "T"
-        21 -> marble = "U"
-        22 -> marble = "V"
-        23 -> marble = "W"
-        24 -> marble = "X"
-        25 -> marble = "Y"
-        26 -> marble = "Z"
-    }
-
-    return marble
-}
-
 @Composable
 fun MarbleAboutDialog() {
     val showDialog = remember { mutableStateOf(false) }
@@ -262,12 +221,6 @@ fun MarbleAboutDialog() {
             }
         )
     }
-}
-
-@Preview
-@Composable
-fun AboutDialogMarble() {
-    AboutDialog()
 }
 
 @Preview(showBackground = true)

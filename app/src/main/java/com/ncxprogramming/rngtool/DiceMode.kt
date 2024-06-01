@@ -246,12 +246,6 @@ fun DiceAboutDialog() {
     }
 }
 
-@Preview
-@Composable
-fun AboutDialogPreview() {
-    AboutDialog()
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DropDownExample(): Int {
