@@ -13,6 +13,10 @@ Generate up to 7 random numbers using cards. You can display the numbers, cards 
 ### Marbles
 Generate up to 5 random numbers and letters using marbles.
 ## System Requirements
-- At least Android 8.0 or higher
+- A device running Android 8.0 or higher
 ## Installation
-RNGTool Android is still in early beta, but you can find development builds in ![Github Actions](https://github.com/NCX-Programming/RNGTool-Android/actions) that you can install on your Android device.
+### Releases
+Head to the [Releases Page](https://github.com/NCX-Programming/RNGTool-Android/releases) and download the latest APK file on your Android device. You should be able to install it just like any other APK.
+### GitHub Actions
+GitHub Actions builds a new APK for every commit to RNGTool-Android. To see all builds, go to the ![GitHub Actions](https://github.com/NCX-Programming/RNGTool-Android/actions) page.
+

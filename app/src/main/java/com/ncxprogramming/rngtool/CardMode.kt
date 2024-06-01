@@ -35,6 +35,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -125,7 +128,7 @@ fun CardMode(navController: NavHostController) {
                     }
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    switchValues = FilledCardExample(snackbarHostState)
+                    switchValues = cardSettingsCard()
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Button(
@@ -157,15 +160,9 @@ fun CardMode(navController: NavHostController) {
 
                             println("aceValue: $aceValue")
                             println("switchValues: $switchValues")
-//                            println("aceValue: $aceValue")
-//                            println("aceValue: $aceValue")
-//                            println("aceValue: $aceValue")
                         }) {
                         Text("Clear!")
                     }
-                }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-//                    DealtCardButton(sliderPosition, card1, card2, card3, card4, card5, card6, card7, switchValues)
                 }
             }
         }
@@ -185,8 +182,10 @@ private fun FinalRandom(
     switchValues: Array<Boolean>
 ) {
     var cardStrings by remember { mutableStateOf("") }
-    var cards = emptyArray<Int>()
-//    val gradientColors = listOf(md_theme_dark_tertiary, md_theme_dark_tertiaryContainer, md_theme_dark_onSecondary /*...*/)
+    val cards = emptyList<Int>().toMutableList()
+    val density = LocalDensity.current
+    val configuration = LocalConfiguration.current
+    val screenWidthPx = with(density) { configuration.screenWidthDp.dp.roundToPx() }
 
     cards += card1
     cards += card2
@@ -198,15 +197,18 @@ private fun FinalRandom(
     cardStrings = CardString(sliderPosition.toInt(), cards, switchValues)
 
     Text(
-        "$cardStrings",
-        fontSize = 42.sp,
-        fontWeight = FontWeight.Bold
+        text = cardStrings,
+        fontSize = (screenWidthPx/36).sp,
+        style = TextStyle(fontSize = 42.sp),
+        fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth()
     )
 }
 
 fun CardString(
     cardAmount: Int,
-    cards: Array<Int>,
+    cards: MutableList<Int>,
     switchValues: Array<Boolean>
 ): String {
     val sarray = Array(cardAmount) { "" }
@@ -233,7 +235,7 @@ fun CardString(
 //    print("\n\n")
 
     while (x < sarray.size) {
-        if (fb) {
+        if (!fb) {
             if (sarray[x] == "11") {
                 sarray[x] = "J"
             } else if (sarray[x] == "12") {
@@ -241,7 +243,7 @@ fun CardString(
             } else if (sarray[x] == "13") {
                 sarray[x] = "K"
             }
-        } else if (!fb) {
+        } else if (fb) {
             if (sarray[x] == "11") {
                 sarray[x] = "10"
             } else if (sarray[x] == "12") {
@@ -252,17 +254,17 @@ fun CardString(
         }
         if (ab) {
             if (sarray[x] == "1") {
-                if (!fb) {
+                if (fb) {
                     sarray[x] = "11"
-                } else if (fb) {
+                } else if (!fb) {
                     sarray[x] = "A"
                 }
             }
         } else if (!ab) {
             if (sarray[x] == "1") {
-                if (!fb) {
+                if (fb) {
                     sarray[x] = "1"
-                } else if (fb) {
+                } else if (!fb) {
                     sarray[x] = "A"
                 }
             }
@@ -289,10 +291,10 @@ fun CardString(
 }
 
 @Composable
-fun FilledCardExample(snackbarHostState: SnackbarHostState): Array<Boolean> {
+fun cardSettingsCard(): Array<Boolean> {
     var aceValue by remember { mutableStateOf(false) }
     var showFace by remember { mutableStateOf(false) }
-    var switchValues by remember { mutableStateOf(Array<Boolean>(2) { false }) }
+    val switchValues by remember { mutableStateOf(Array<Boolean>(2) { false }) }
 
     Card(
         colors = CardDefaults.cardColors(
@@ -303,7 +305,7 @@ fun FilledCardExample(snackbarHostState: SnackbarHostState): Array<Boolean> {
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = "Set Ace value to 11?",
+                text = "Set Ace value to 11  ",
                 modifier = Modifier
                     .padding(16.dp),
                 textAlign = TextAlign.Left,
@@ -313,7 +315,7 @@ fun FilledCardExample(snackbarHostState: SnackbarHostState): Array<Boolean> {
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = "Show Face Cards?   ",
+                text = "Show Point Values   ",
                 modifier = Modifier
                     .padding(16.dp),
                 textAlign = TextAlign.Left,
